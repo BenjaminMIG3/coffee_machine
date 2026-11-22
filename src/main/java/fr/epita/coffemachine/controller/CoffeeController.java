@@ -2,6 +2,7 @@ package fr.epita.coffemachine.controller;
 
 import fr.epita.coffemachine.dto.CoffeeDto;
 import fr.epita.coffemachine.dto.CreateCoffeeDto;
+import fr.epita.coffemachine.dto.UpdateCoffeeDto;
 import fr.epita.coffemachine.service.CoffeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,14 @@ public class CoffeeController {
 	@GetMapping("{id}")
 	ResponseEntity<CoffeeDto> coffee(@PathVariable Long id) {
 		return coffeeService.oneCoffee(id)
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.notFound().build());
+	}
+
+	// Mise à jour partielle (PATCH)
+	@PatchMapping("{id}")
+	ResponseEntity<CoffeeDto> update(@PathVariable Long id, @RequestBody @Valid UpdateCoffeeDto dto) {
+		return coffeeService.update(dto, id)
 				.map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
 	}
